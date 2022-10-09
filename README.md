@@ -89,7 +89,7 @@ Using the file **stack**, you need to get through the condition **exploit == 0x9
 ## Solution
 
 This exploit is about the function fgets. Our array is 10 bytes long and the function fgets is looking for up to 13 bytes. Thus, by giving more than 10 bytes to the standard input, we are going to overrun the buffer's boundary and overwrite an adjacent memory location. 
-Let me guide you through a simple solution in which we'll be using python alongside GCC
+Let me guide you through a simple solution in which we'll be using python alongside **gdb**
 
 Let's start by inspecting the source file **stack.c** :
 ```
@@ -99,7 +99,7 @@ How to trigger the "***It worked!***" output ?
 
 Let's debug the file using GCC :
 ```
-gcc stack
+gdb stack
 ```
 Let's try running the program using the command run :
 
