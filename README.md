@@ -110,7 +110,7 @@ cat win0.c
 We can cleary see that the **Win()** functions calls a **/bin/sh** and that gives us access to a shell that we can use to execute commands.
 How to trigger the "**win()**" ?
 
-Let's debug the file using GCC :
+Let's debug the file using GDB :
 ```
 gdb win0
 ```
