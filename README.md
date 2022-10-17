@@ -1,6 +1,6 @@
 # Buffer Overflow
 
-![image](https://user-images.githubusercontent.com/91763346/196064685-1dead369-bc6c-4d61-ad09-37deb9e9f0e3.png)
+![image](https://user-images.githubusercontent.com/91763346/196140273-7d011149-a523-4ef2-9045-7f131c402042.png)
 
 Hello everyone! This Buffer Overflow documentation provides the complete demonstration, understanding and the scripts necessary for buffer overflow exploitation.
 
@@ -217,7 +217,7 @@ Input:
 $ whoami
 kali
 ```
-That's basically us getting a shell on our own machine, now imagine if that were on a target machine, well, the next phase would be **privilage escalation**.
+That's basically us getting a shell on our own machine, now imagine if that were to be on a target machine, well, the next phase would be **maintaining persistnace** and **privilage escalation**.
 
 Remember that stack works in reverse! & that python is a very powerful tool that you need to learn if you're willing to get deeper into CyberSec.
 
