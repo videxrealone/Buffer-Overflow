@@ -74,9 +74,9 @@ In the above example, you can see that a a number of A’s (x41) were sent to th
 
 Now, the A’s have completely escaped the buffer space and have actually reached the EIP. This is an example of a buffer overflow and how poor coding can become dangerous. If an attacker can gain control of the EIP, he or she can use the pointer to point to malicious code and gain a reverse shell.
 
-## Example 1
+## Hands On Example
 
-Basic demonstration of a stack buffer overflow. This example is compiled to a **32-bit** program, and has stack protection disabled.
+Basic demonstration of a buffer overflow **ret2win** exploit. This example is compiled to a **32-bit** program, and has stack protection disabled.
 
 ```
 gcc -o win0 win0.c -m32 -fno-stack-protector
