@@ -212,7 +212,13 @@ p.interactive()     #made to make link the payload and the process.
 And now let's run the python script and become hackers 🕶️. 
 ```
 $ python3 exploit.py
+[+] Starting local process './win0': pid 3539
+[*] Switching to interactive mode
+Input:
+$ whoami
+kali
 ```
+That's basically us getting a shell on our own machine, now imagine if that were on a target machine, well, the next phase would be **privilage escalation**.
 
 Remember that stack works in reverse! & that python is a very powerful tool that you need to learn if you're willing to get deeper into CyberSec.
 
