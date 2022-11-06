@@ -129,7 +129,7 @@ We can see that the program worked just fine, let's try re-running it while usin
 ```
 gdb> run
 
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 ```
 We can see that we got a segmentation fault and that the program crashed, thats because we have overflooded the stack and corrupted the return addresses :
 
