@@ -27,7 +27,6 @@ A **buffer overflow** occurs when **more data is put into a fixed-length buffer*
 
 The stack grows from high address(0xffffffff) to low address(0x00000000).
 
-Say you have 32 gb of RAM, so 2^32 addresses will be available.
 
 ![image](https://user-images.githubusercontent.com/91763346/194780684-9d93ce1e-7ab8-414d-9f48-fec77c0466a7.png)
 
