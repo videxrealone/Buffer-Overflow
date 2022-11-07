@@ -2,7 +2,7 @@
 
 ![image](https://user-images.githubusercontent.com/91763346/196140273-7d011149-a523-4ef2-9045-7f131c402042.png)
 
-Hello everyone! This Buffer Overflow documentation provides the complete demonstration, understanding and the scripts necessary for buffer overflow exploitation.
+Hello everyone! This Buffer Overflow Proof of Concept provides the complete demonstration, understanding and the scripts necessary for buffer overflow exploitation.
 
 ## Introduction
 
@@ -39,7 +39,7 @@ Say you have 32 gb of RAM, so 2^32 addresses will be available.
 
 **Data** → initialised/**uninitialised(BSS segment)** variables get held here.
 
-**Text** → Actual **code** of our programme (exe file), read-only. 
+**Text** → Actual **code** of our program (exe file), read-only. 
 
 - Global variables are stored in data segment.
 - Local variables & ptr are stored in stack. ptr will be in stack but its data will be stored in heap.
@@ -149,7 +149,7 @@ Let's save that address for now.
 Let's quit gdb using **quit** :
 
 ```
-gdb> quit
+gdb> exit
 ```
 
 In linux we can execute simple python commands directly in the terminal using **-c**, can you run a simple **"print ('Hello world!') "** ?
@@ -188,7 +188,7 @@ $ touch exploit.py
 $ nano exploit.py  // you can also use : vim exploit.py
 ```
 
-Using any text editor of your choice, **copy** this text inside the file using **CTRL + SHIFT + C** and **paste it** using **CTRL + SHIFT + V**  :
+Using any text editor of your choice, **copy** this text inside the file using **CTRL + C** and **paste it** using **CTRL + SHIFT + V**  :
 
 ```
 from pwn import *
@@ -217,7 +217,7 @@ Input:
 $ whoami
 kali
 ```
-That's basically us getting a shell on our own machine, now imagine if that were to be on a target machine, well, the next phase would be **maintaining persistnace** and **privilage escalation**.
+That's basically us getting a shell on our own machine, now imagine if that were to be on a target machine, well, the next phase would be **privilage escalation** and **maintaining persistnace**.
 
 Remember that stack works in reverse! & that python is a very powerful tool that you need to learn if you're willing to get deeper into CyberSec.
 
